@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="pantallaInicio" alignment="CENTER" prefHeight="300.0" prefWidth="500.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectodomino2.HelloController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <ImageView fitHeight="138.0" fitWidth="385.0" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@Imagen%20PNG.png" />
+      </image>
+   </ImageView>
+   <ImageView fx:id="jugarBoton" fitHeight="101.0" fitWidth="207.0" onMouseClicked="#jugar" onMouseEntered="#obscurecer" onMouseExited="#aclarar" pickOnBounds="true" preserveRatio="true">
+      <image>
+         <Image url="@jugarBoton.png" />
+      </image>
+   </ImageView>
+</VBox>
