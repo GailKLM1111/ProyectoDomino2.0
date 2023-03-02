@@ -27,7 +27,7 @@ public class NoJugadores {
     void unJugador(ActionEvent event) {
 
         try {
-            Parent pantallaDeJuego = FXMLLoader.load(getClass().getResource("pantallaDeJuego.fxml"));
+            Parent pantallaDeJuego = FXMLLoader.load(getClass().getResource("pantallaUnJugador.fxml"));
 
             Scene escenaNueva = new Scene(pantallaDeJuego);
 
@@ -43,10 +43,34 @@ public class NoJugadores {
     @FXML
     void dosJugadores(ActionEvent event) {
 
+        try {
+            Parent pantallaDeJuego = FXMLLoader.load(getClass().getResource("pantallaDosJugadores.fxml"));
+
+            Scene escenaNueva = new Scene(pantallaDeJuego);
+
+            Stage escenaActual = (Stage) pantallaNoJugadores.getScene().getWindow();
+            escenaActual.setScene(escenaNueva);
+
+        } catch (Exception e) {
+            System.out.println("Error al cargar la ventana");
+        }
+
     }
 
     @FXML
     void tresJugadores(ActionEvent event) {
+
+        try {
+            Parent pantallaDeJuego = FXMLLoader.load(getClass().getResource("pantallaTresJugadores.fxml"));
+
+            Scene escenaNueva = new Scene(pantallaDeJuego);
+
+            Stage escenaActual = (Stage) pantallaNoJugadores.getScene().getWindow();
+            escenaActual.setScene(escenaNueva);
+
+        } catch (Exception e) {
+            System.out.println("Error al cargar la ventana");
+        }
 
     }
 

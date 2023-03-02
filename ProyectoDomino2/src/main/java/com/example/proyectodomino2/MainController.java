@@ -8,13 +8,10 @@ import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.util.Stack;
-
-public class HelloController {
+public class MainController {
 
     @FXML
     private VBox pantallaInicio;
