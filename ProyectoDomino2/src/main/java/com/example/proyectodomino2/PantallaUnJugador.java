@@ -90,6 +90,8 @@ public class PantallaUnJugador {
 
 
 
+
+
     }
 
     public void mostrarFichas(){
