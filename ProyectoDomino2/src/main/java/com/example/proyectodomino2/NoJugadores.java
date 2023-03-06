@@ -35,7 +35,7 @@ public class NoJugadores {
             escenaActual.setScene(escenaNueva);
 
         } catch (Exception e) {
-            System.out.println("Error al cargar la ventana");
+            System.out.println("Error al cargar la ventana:" + e);
         }
 
     }
