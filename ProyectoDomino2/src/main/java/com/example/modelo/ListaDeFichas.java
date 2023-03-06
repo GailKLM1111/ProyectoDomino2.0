@@ -9,6 +9,7 @@ public class ListaDeFichas {
     public static ArrayList fichasJugador2 = new ArrayList();
     public static ArrayList fichasJugador3 = new ArrayList();
     public static ArrayList fichasJugador4 = new ArrayList();
+    public static ArrayList fichasComputadora = new ArrayList();
 
     public static int getIndiceFicha () {
 

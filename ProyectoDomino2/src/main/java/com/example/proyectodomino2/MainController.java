@@ -85,8 +85,13 @@ public class MainController {
             indice = ListaDeFichas.getIndiceFicha();
 
             fichita = (Ficha) ListaDeFichas.fichasTotales.get(indice);
-            fichita.setEstado(false);
-            lj.add(fichita);
+
+            if (fichita.getEstado() == false) {
+                contador--;
+            } else {
+                fichita.setEstado(false);
+                lj.add(fichita);
+            }
 
         }
 
@@ -105,6 +110,68 @@ public class MainController {
 
             }
         }
+
+    }
+
+    public static ArrayList<Integer> quienEmpieza () {
+
+        ArrayList<Integer> mulasPorJugador = new ArrayList<>();
+
+        mulasPorJugador.add(evaluarMulas(ListaDeFichas.fichasJugador1));
+
+        if (ListaDeFichas.fichasJugador2.size() != 0) {
+            mulasPorJugador.add(evaluarMulas(ListaDeFichas.fichasJugador2));
+        }
+
+        if (ListaDeFichas.fichasJugador3.size() != 0) {
+            mulasPorJugador.add(evaluarMulas(ListaDeFichas.fichasJugador3));
+        }
+
+        if (ListaDeFichas.fichasJugador4.size() != 0) {
+            mulasPorJugador.add(evaluarMulas(ListaDeFichas.fichasJugador4));
+        }
+
+        if (ListaDeFichas.fichasComputadora.size() != 0) {
+            mulasPorJugador.add(evaluarMulas(ListaDeFichas.fichasComputadora));
+        }
+
+        int indiceDeQuienEmpieza = 0;
+
+        for (int x = 0; x < mulasPorJugador.size(); x++) {
+            if (mulasPorJugador.get(x) > mulasPorJugador.get(indiceDeQuienEmpieza)) {
+                indiceDeQuienEmpieza = x;
+            }
+        }
+
+        int mayor = mulasPorJugador.get(indiceDeQuienEmpieza);
+
+        ArrayList<Integer> lista = new ArrayList<>();
+        lista.add(indiceDeQuienEmpieza + 1);
+        lista.add(mayor);
+
+        return lista;
+
+    }
+
+    public static int evaluarMulas (ArrayList lj) {
+
+        int mulaValor = 0;
+        int mulaValorTemp = 0;
+
+        for (int i=0;i< lj.size();i++) {
+
+            Ficha ficha = (Ficha)lj.get(i);
+            mulaValor = ficha.getMula();
+
+            if (mulaValor > mulaValorTemp) {
+                mulaValorTemp = mulaValor;
+            }
+
+        }
+
+        mulaValor = mulaValorTemp;
+
+        return mulaValor;
 
     }
 

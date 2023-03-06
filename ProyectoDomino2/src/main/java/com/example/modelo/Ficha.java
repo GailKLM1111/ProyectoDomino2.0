@@ -15,24 +15,14 @@ public class Ficha {
     boolean estado;
     boolean jugar;
 
+    int mula;
+
     public Ficha(int v1, int v2, boolean s, boolean j) {
 
         this.v1=v1;
         this.v2=v2;
         this.estado=s;
         this.jugar=j;
-//
-//        String imgAddress = "/Users/gaillopez/Desktop/OCTAVO SEMESTRE /Videojuegos/ProyectoDomino2.0/ProyectoDomino2/src/main/resources/sprites/fichas/0-0.png";
-//        String tmpAddress;
-//
-//        File file2 = new File(imgAddress);
-//        tmpAddress = file2.toURI().toURL().toExternalForm();
-//        Image image = new Image(tmpAddress);
-
-//        ../../../sprites/escenarios/unJugador.png
-//        jetbrains://idea/navigate/reference?project=ProyectoDomino2.0&path=sprites/fichas/0-0.png
-//        /Users/gaillopez/Desktop/OCTAVO SEMESTRE /Videojuegos/ProyectoDomino2.0/ProyectoDomino2/src/main/resources/sprites/fichas/0-0.png
-//        file:/Users/gaillopez/Desktop/OCTAVO%20SEMESTRE%20/Videojuegos/ProyectoDomino2.0/ProyectoDomino2/target/classes/sprites/escenarios/unJugador.png
 
         try {
             this.fichaURL = "/Users/gaillopez/Desktop/OCTAVO SEMESTRE /Videojuegos/ProyectoDomino2.0/ProyectoDomino2/src/main/resources/sprites/fichas/" + this.v1 +  "-" + this.v2 +".png";
@@ -45,6 +35,12 @@ public class Ficha {
         } catch (Exception e) {
             System.out.println("Error al cargar la imagen de la ficha");
 
+        }
+
+        if (this.v1==this.v2) {
+            this.mula= this.v1;
+        } else {
+            this.mula=0;
         }
 
     }
@@ -71,6 +67,14 @@ public class Ficha {
 
     public void setEstado(boolean c) {
         this.estado=c;
+    }
+
+    public int getMula() {
+        return mula;
+    }
+
+    public void setMula(int mula) {
+        this.mula = mula;
     }
 
     public Image getImagenFicha() {
