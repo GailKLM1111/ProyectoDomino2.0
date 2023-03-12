@@ -175,73 +175,73 @@ public class MainController {
 
     }
 
-    public static void evalular_jugador (ArrayList lj, String j, int z) {
+//    public static void evalularJugador (ArrayList lj, String j, int z) {
+//
+//        int r = -1;
+//        System.out.println("Jugador(a) "+j+" Puedes jugar con la(s) ficha(s):");
+//
+//        for (int i=0;i< lj.size();i++) {
+//
+//            Ficha f=null;
+//            f=(Ficha)lj.get(i);
+//
+//            if (true==f.getJugar()) {
+//
+//                if (v1==f.getV1()||v1==f.getV2()||v2==f.getV1()||v2==f.getV2()) {
+//
+//                    int h=i+1;
+//                    System.out.println("|" + f.getV1() + ":" + f.getV2() +"| .........."+h+" \n");
+//                    r++;
+//                    sb=0;
+//
+//                }
+//
+//            }
+//
+//        }
+//
+//        if (r==-1) {
+//
+//            System.out.println("No tienes fichas para jugar");
+//            tomar_ficha(lj,j,z);
+//
+//        } else {
+//
+//            System.out.println("Digita el numero que indica tu ficha para jugarla");
+//            int t=Leer.datoInt();
+//            t=t-1;
+//            Ficha fi=null;
+//            fi=(Ficha)lj.get(t);
+//
+//            if (v1!=v2) {
+//
+//                if (v1==fi.getV1())
+//                    v1=fi.getV2();
+//                else
+//                if (v1==fi.getV2())
+//                    v1=fi.getV1();
+//                else
+//                if (v2==fi.getV1())
+//                    v2=fi.getV2();
+//                else
+//                if (v2==fi.getV2())
+//                    v2=fi.getV1();
+//
+//            } else {
+//
+//                if (v1==fi.getV1()) {
+//                    v2=fi.getV2();
+//                } else
+//                    v1=fi.getV1();
+//
+//            }
+//
+//            fi.setJugar(false);
+//
+//        }
+//    }
 
-        int r = -1;
-        System.out.println("Jugador(a) "+j+" Puedes jugar con la(s) ficha(s):");
-
-        for (int i=0;i< lj.size();i++) {
-
-            Ficha f=null;
-            f=(Ficha)lj.get(i);
-
-            if (true==f.getJugar()) {
-
-                if (v1==f.getV1()||v1==f.getV2()||v2==f.getV1()||v2==f.getV2()) {
-
-                    int h=i+1;
-                    System.out.println("|" + f.getV1() + ":" + f.getV2() +"| .........."+h+" \n");
-                    r++;
-                    sb=0;
-
-                }
-
-            }
-
-        }
-
-        if (r==-1) {
-
-            System.out.println("No tienes fichas para jugar");
-            tomar_ficha(lj,j,z);
-
-        } else {
-
-            System.out.println("Digita el numero que indica tu ficha para jugarla");
-            int t=Leer.datoInt();
-            t=t-1;
-            Ficha fi=null;
-            fi=(Ficha)lj.get(t);
-
-            if (v1!=v2) {
-
-                if (v1==fi.getV1())
-                    v1=fi.getV2();
-                else
-                if (v1==fi.getV2())
-                    v1=fi.getV1();
-                else
-                if (v2==fi.getV1())
-                    v2=fi.getV2();
-                else
-                if (v2==fi.getV2())
-                    v2=fi.getV1();
-
-            } else {
-
-                if (v1==fi.getV1()) {
-                    v2=fi.getV2();
-                } else
-                    v1=fi.getV1();
-
-            }
-
-            fi.setJugar(false);
-
-        }
-    }
-
-    public static ArrayList<Integer> buscarFichasValidas (ArrayList fichasJugador, String j, int z , Ficha fichaEnJuego) {
+    public static ArrayList<Integer> buscarFichasValidas (ArrayList fichasJugador, Ficha fichaEnJuego) {
 
         Ficha ficha = null;
         ArrayList<Integer> listaFichasValidas = new ArrayList<>();
@@ -250,7 +250,7 @@ public class MainController {
 
             ficha = (Ficha)fichasJugador.get(i);
 
-            if (ficha.getJugar() == true) {
+            if (ficha.getJugar()) {
 
                 if (fichaEnJuego.getV1() == ficha.getV1() || fichaEnJuego.getV1() == ficha.getV2()
                         || fichaEnJuego.getV2() == ficha.getV1() || fichaEnJuego.getV2() == ficha.getV2()) {
@@ -267,8 +267,7 @@ public class MainController {
 
     }
 
-
-    public static boolean continuarJugando (int jugador2, int jugador3, int jugador4, int computadora) {
+    public static int continuarJugando (int jugador2, int jugador3, int jugador4, int computadora) {
 
         int continuar1 = 0;
         int continuar2 = 0;
@@ -277,6 +276,8 @@ public class MainController {
         int continuarC = 0;
 
         int noJuega = 99;
+
+        int ganador = 0;
 
         Ficha ficha = null;
 
@@ -334,19 +335,111 @@ public class MainController {
         if (continuar1 == 0 || continuar2 == 0 || continuar3 == 0
                 || continuar4 == 0 || continuarC == 0) {
 
-            if (continuar1==0)
-                System.out.println("GANADOR JUGADOR(A): "+a);
+            if (continuar1 == 0)
+                ganador = 1;
 
-            if (continuar2==0)
-                System.out.println("GANADOR JUGADOR(A): "+b);
+            if (continuar2 == 0)
+                ganador = 2;
 
-            if(continuar3==0)
-                System.out.println("GANADOR JUGADOR(A): "+c);
+            if (continuar3 == 0)
+                ganador = 3;
 
-            return false;
-        } else;
-        return true;
+            if (continuar4 == 0)
+                ganador = 4;
+
+            if (continuarC == 0)
+                ganador = 5;
+
+        }
+
+        return ganador;
+
     }
+
+    public static boolean validarIzquierda (Ficha ficha, Ficha fichaEnJuego) {
+
+        boolean validar = false;
+
+        if (fichaEnJuego.getV1() == ficha.getV2()) {
+            validar = true;
+        }
+
+        return validar;
+
+    }
+
+    public static boolean validarDerecha (Ficha ficha, Ficha fichaEnJuego) {
+
+        boolean validar = false;
+
+        if (fichaEnJuego.getV2() == ficha.getV1()) {
+            validar = true;
+        }
+
+        return validar;
+
+    }
+
+//    public static void tomar_ficha(ArrayList listaFichas,String a, int z) {
+//
+//        int bandera = 0;
+//        int indice = 0;
+//
+//        if (sb!=3) {
+//
+//            while (bandera < 1) {
+//
+//                double n= Math.random();
+//                n= n*100;
+//                int x=(int)n;
+//
+//                indice = ListaDeFichas.getIndiceFicha();
+//                Ficha ficha = (Ficha)ListaDeFichas.fichasTotales.get(indice);
+//
+//                if (ficha.getEstado()) {
+//
+//                    int bandera2 = 0;
+//
+//                    while (bandera2 < 1) {
+//
+//                        listaFichas.add(ficha);
+//                        System.out.println("Tu ficha es");
+//                        System.out.println("|" + ficha.getV1() + ":" + ficha.getV2() +"| \n");
+//
+//                        if(ficha.getV1()==v1||ficha.getV2()==v2||ficha.getV1()==v2||ficha.getV2()==v1)  {
+//
+//                            bandera++;
+//                            bandera2++;
+//                            evalular_jugador(listaFichas,a,z);
+//
+//                        } else {
+//
+//                            System.out.println("NO SACASTE UNA FICHA INDICADA");
+//                            System.out.println("DIGITA ALGUN NUMERO PARA TOMAR OTRA");
+//                            int h = Leer.datoInt();
+//                            bandera2++;
+//
+//                        }
+//
+//                    }
+//
+//                } else {
+//
+//                    System.out.println("YA NO HAY FICHAS PARA TOMAR");
+//                    bandera++;
+//
+//                    sb++;
+//                }
+//
+//            }
+//        } else {
+//
+//            System.out.println("SE HA SERRADO EL JUEGO");
+//            juego_cerrado(z);
+//
+//        }
+//
+//    }
 
 
 }
