@@ -14,8 +14,15 @@ public class Ficha {
     Image imagenFicha;
     boolean estado;
     boolean jugar;
-
     int mula;
+
+    public Ficha() {
+        this.v1=0;
+        this.v2=0;
+        this.estado=false;
+        this.jugar=false;
+        this.mula=0;
+    }
 
     public Ficha(int v1, int v2, boolean s, boolean j) {
 
@@ -51,6 +58,14 @@ public class Ficha {
 
     public int getV2() {
         return this.v2;
+    }
+
+    public void setV1(int v1) {
+        this.v1 = v1;
+    }
+
+    public void setV2(int v2) {
+        this.v2 = v2;
     }
 
     public boolean getEstado() {
