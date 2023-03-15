@@ -441,5 +441,16 @@ public class MainController {
 //
 //    }
 
+    public static boolean evaluarGanador (ArrayList listaFichas) {
+
+        boolean ganador = false;
+
+        if (listaFichas.size() == 0) {
+            ganador = true;
+        }
+
+        return ganador;
+
+    }
 
 }

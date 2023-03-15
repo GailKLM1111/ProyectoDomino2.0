@@ -37,9 +37,11 @@ public class PantallaUnJugador {
     @FXML
     private DialogPane dialogo;
 
+    int izquierda = -1;
+    int derecha = 1;
     private int[] coordenadasTablero1 = new int[]{3,3};
-
     private int[] coordenadasTablero2 = new int[]{3,3};
+    private int direccionCompu;
 
     @FXML
     void repartirFichas(ActionEvent event) {
@@ -55,6 +57,7 @@ public class PantallaUnJugador {
         ArrayList<Integer> lista = quienEmpieza();
 
         dialogo.setVisible(true);
+        dialogo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Arial'; -fx-background-color: #408000;");
 
         Ficha ficha = null;
         Ficha fichaEnJuego = null;
@@ -80,6 +83,12 @@ public class PantallaUnJugador {
 
             evaluarJugador(ListaDeFichas.fichasComputadora, fichaEnJuego, 0);
 
+            do {
+
+
+
+            } while (!evaluarGanador(ListaDeFichas.fichasJugador1) || !evaluarGanador(ListaDeFichas.fichasComputadora));
+
         } else {
 
             dialogo.setContentText("Empieza la computadora");
@@ -102,8 +111,6 @@ public class PantallaUnJugador {
             evaluarJugador(ListaDeFichas.fichasJugador1, fichaEnJuego, 1);
 
         }
-
-
 
     }
 
@@ -178,8 +185,6 @@ public class PantallaUnJugador {
 
     public void mostrarFichasTablero(Ficha ficha, int direccion, boolean invertir) {
 
-        limpiarTablero();
-
         ImageView imagenFicha = new ImageView(ficha.getImagenFicha());
 
         imagenFicha.setPreserveRatio(true);
@@ -212,6 +217,7 @@ public class PantallaUnJugador {
 
         }
 
+        limpiarTablero();
 
     }
 
@@ -257,6 +263,8 @@ public class PantallaUnJugador {
             } else {
 
                 System.out.println("Fichas validas: " + listaFichasValidas);
+                Ficha fichaCompu = (Ficha) fichasJugador.get(listaFichasValidas.get(0));
+                tiradaCompu(fichaCompu, fichaEnJuego);
 
             }
 
@@ -293,24 +301,9 @@ public class PantallaUnJugador {
 
     }
 
-//    public void colocarFicha(){
-//
-//        Ficha ficha = (Ficha) ListaDeFichas.fichasJugador1.get(posicion);
-//
-//        ListaDeFichas.fichasJugador1.remove(posicion);
-//        mostrarFichasTablero(ficha);
-//        mostrarFichas();
-//
-//        evaluarJugador(ListaDeFichas.fichasComputadora, ficha, 0);
-//
-//    }
-
     public void clickEnFicha(ArrayList<Integer> listaFichasValidas, ArrayList fichasJugador, Ficha fichaEnJuego) {
 
         limpiarTablero();
-
-        int izquierda = -1;
-        int derecha = 1;
 
         for (int i = 0; i < listaFichasValidas.size(); i++) {
 
@@ -326,7 +319,7 @@ public class PantallaUnJugador {
                     Ficha fichaInvertida = new Ficha();
                     fichaInvertida.setV1(ficha.getV2());
                     fichaInvertida.setV2(ficha.getV1());
-                    fichaInvertida.setImagenFicha(ficha.getImagenFicha());
+                    fichaInvertida.setFichaURL(ficha.getFichaURL());
 
                     dialogo.setContentText("Ficha seleccionada: " + ficha.getV1() + ":|:" + ficha.getV2());
 
@@ -351,7 +344,6 @@ public class PantallaUnJugador {
                         panel = mostrarCasillasValidas(derecha);
                         clickEnCasilla(panel, fichaInvertida, derecha, true);
                     }
-
 
                 }
             });
@@ -401,7 +393,6 @@ public class PantallaUnJugador {
         return panel;
     }
 
-
     public void limpiarTablero () {
 
         for (int i = 0; i < gridTablero.getChildren().size(); i++) {
@@ -423,15 +414,64 @@ public class PantallaUnJugador {
             public void handle(MouseEvent event) {
 
                 if (invertida) {
-                    System.out.println("Se inserta la ficha de la siguiente manera: " + ficha.getV2() + ":|:" + ficha.getV1());
+                    System.out.println("Se inserta la ficha de la siguiente manera: " + ficha.getV1() + ":|:" + ficha.getV2());
                 } else {
                     System.out.println("Se inserta la ficha de la siguiente manera: " + ficha.getV1() + ":|:" + ficha.getV2());
                 }
 
+                limpiarTablero();
                 mostrarFichasTablero(ficha, direccion, invertida);
+                quitarFicha(ficha);
+                mostrarFichas();
 
             }
         });
+
+    }
+
+    public void quitarFicha (Ficha ficha) {
+
+        Ficha fichaDelJugador = null;
+
+        for (int i = 0; i < ListaDeFichas.fichasJugador1.size(); i++) {
+
+            fichaDelJugador = (Ficha) ListaDeFichas.fichasJugador1.get(i);
+
+            if (ficha.getFichaURL().equals(fichaDelJugador.getFichaURL())) {
+
+                ListaDeFichas.fichasJugador1.remove(i);
+
+            }
+
+        }
+
+
+    }
+
+    public void tiradaCompu (Ficha ficha, Ficha fichaEnJuego){
+
+        Ficha fichaInvertida = new Ficha();
+        fichaInvertida.setV1(ficha.getV2());
+        fichaInvertida.setV2(ficha.getV1());
+        fichaInvertida.setFichaURL(ficha.getFichaURL());
+
+        dialogo.setContentText("Ficha seleccionada: " + ficha.getV1() + ":|:" + ficha.getV2());
+
+        if (validarDerecha(ficha, fichaEnJuego)) {
+            mostrarFichasTablero(ficha, derecha, false);
+        }
+
+        if (validarIzquierda(ficha, fichaEnJuego)) {
+            mostrarFichasTablero(ficha, izquierda, false);
+        }
+
+        if (validarDerecha(fichaInvertida, fichaEnJuego)) {
+            mostrarFichasTablero(fichaInvertida, derecha, true);
+        }
+
+        if (validarIzquierda(fichaInvertida, fichaEnJuego)) {
+            mostrarFichasTablero(fichaInvertida, izquierda, true);
+        }
 
     }
 
