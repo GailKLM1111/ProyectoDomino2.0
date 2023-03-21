@@ -86,7 +86,7 @@ public class MainController {
 
             fichita = (Ficha) ListaDeFichas.fichasTotales.get(indice);
 
-            if (fichita.getEstado() == false) {
+            if (!fichita.getEstado()) {
                 contador--;
             } else {
                 fichita.setEstado(false);
@@ -380,24 +380,25 @@ public class MainController {
 
     }
 
-//    public static void tomar_ficha(ArrayList listaFichas,String a, int z) {
-//
-//        int bandera = 0;
-//        int indice = 0;
-//
+    public static void tomarFicha(ArrayList listaFichas) {
+
+        int bandera = 0;
+        int indice = 0;
+
 //        if (sb!=3) {
-//
-//            while (bandera < 1) {
-//
-//                double n= Math.random();
-//                n= n*100;
-//                int x=(int)n;
-//
-//                indice = ListaDeFichas.getIndiceFicha();
-//                Ficha ficha = (Ficha)ListaDeFichas.fichasTotales.get(indice);
-//
-//                if (ficha.getEstado()) {
-//
+
+            while (bandera < 1) {
+
+                indice = ListaDeFichas.getIndiceFicha();
+                Ficha ficha = (Ficha)ListaDeFichas.fichasTotales.get(indice);
+
+                if (ficha.getEstado()) {
+
+                    bandera = 1;
+                    ficha.setEstado(false);
+                    listaFichas.add(ficha);
+                    System.out.println("La ficha que tomaste es: " + ficha.getV1() + ":" + ficha.getV2());
+
 //                    int bandera2 = 0;
 //
 //                    while (bandera2 < 1) {
@@ -422,24 +423,28 @@ public class MainController {
 //                        }
 //
 //                    }
-//
-//                } else {
-//
-//                    System.out.println("YA NO HAY FICHAS PARA TOMAR");
-//                    bandera++;
-//
-//                    sb++;
-//                }
-//
-//            }
+
+                } else {
+
+                    for (Object listaFicha : listaFichas) {
+                        Ficha ficha2 = (Ficha) listaFicha;
+                        if (ficha2.getEstado()) {
+                            bandera++;
+                        }
+                    }
+
+                }
+
+            }
+
 //        } else {
 //
 //            System.out.println("SE HA SERRADO EL JUEGO");
 //            juego_cerrado(z);
 //
 //        }
-//
-//    }
+
+    }
 
     public static boolean evaluarGanador (ArrayList listaFichas) {
 
@@ -450,6 +455,17 @@ public class MainController {
         }
 
         return ganador;
+
+    }
+
+    public static Ficha nuevaFichaEnJuego (int v1, int v2) {
+
+        Ficha nuevaFicha = new Ficha();
+
+        nuevaFicha.setV1(v1);
+        nuevaFicha.setV2(v2);
+
+        return nuevaFicha;
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.proyectodomino2;
 
 import com.example.modelo.ListaDeFichas;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -9,11 +10,11 @@ import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
 import com.example.modelo.Ficha;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class PantallaUnJugador {
     int derecha = 1;
     private int[] coordenadasTablero1 = new int[]{3,3};
     private int[] coordenadasTablero2 = new int[]{3,3};
-    private int direccionCompu;
+    private int turno;
+
+    Ficha fichaEnJuego = new Ficha();
 
     @FXML
     void repartirFichas(ActionEvent event) {
@@ -60,7 +63,7 @@ public class PantallaUnJugador {
         dialogo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: 'Arial'; -fx-background-color: #408000;");
 
         Ficha ficha = null;
-        Ficha fichaEnJuego = null;
+        Ficha fichaTemp = null;
 
         if (lista.get(0) == 1) {
 
@@ -76,6 +79,7 @@ public class PantallaUnJugador {
                     mostrarFichasTablero(ficha);
                     mostrarFichas();
                     fichaEnJuego = ficha;
+                    fichaTemp = ficha;
 
                 }
 
@@ -83,11 +87,23 @@ public class PantallaUnJugador {
 
             evaluarJugador(ListaDeFichas.fichasComputadora, fichaEnJuego, 0);
 
-            do {
-
-
-
-            } while (!evaluarGanador(ListaDeFichas.fichasJugador1) || !evaluarGanador(ListaDeFichas.fichasComputadora));
+//            do {
+//
+//                if (turno == 1) {
+//                    evaluarJugador(ListaDeFichas.fichasJugador1, fichaEnJuego, 1);
+//                    fichaTemp = fichaEnJuego;
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//
+//                if (fichaTemp != fichaEnJuego && turno == 0 ){
+//                    evaluarJugador(ListaDeFichas.fichasComputadora, fichaEnJuego, 0);
+//                }
+//
+//            } while (!evaluarGanador(ListaDeFichas.fichasJugador1) || !evaluarGanador(ListaDeFichas.fichasComputadora));
 
         } else {
 
@@ -109,6 +125,27 @@ public class PantallaUnJugador {
             }
 
             evaluarJugador(ListaDeFichas.fichasJugador1, fichaEnJuego, 1);
+
+
+//            fichaTemp = fichaEnJuego;
+//
+//            do {
+//
+//                if (fichaTemp != fichaEnJuego && turno == 0){
+//                    evaluarJugador(ListaDeFichas.fichasComputadora, fichaEnJuego, 0);
+//                }
+//
+//                if (turno == 1){
+//                    evaluarJugador(ListaDeFichas.fichasJugador1, fichaEnJuego, 1);
+//                    fichaTemp = fichaEnJuego;
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//
+//            } while (!evaluarGanador(ListaDeFichas.fichasJugador1) || !evaluarGanador(ListaDeFichas.fichasComputadora));
 
         }
 
@@ -193,7 +230,7 @@ public class PantallaUnJugador {
         GridPane.setHalignment(imagenFicha, HPos.CENTER);
         GridPane.setValignment(imagenFicha, VPos.CENTER);
 
-        if (ficha.getMula() != 0) {
+        if (ficha.getMula() != 0 || (ficha.getV1() == 0 && ficha.getV2() == 0)) {
 
             imagenFicha.setRotate(90);
 
@@ -207,17 +244,66 @@ public class PantallaUnJugador {
 
         if (direccion < 0) {
 
-            coordenadasTablero1[0] = coordenadasTablero1[0] + direccion;
-            gridTablero.add(imagenFicha, coordenadasTablero1[0], coordenadasTablero1[1]);
+            if (coordenadasTablero1[0] == 0) {
+                if (coordenadasTablero1[1] == 0) {
+                    limpiarTablero();
+                    coordenadasTablero1[0] = coordenadasTablero1[0] + 1;
+                    gridTablero.add(imagenFicha, coordenadasTablero1[0], coordenadasTablero1[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV1(), fichaEnJuego.getV2());
+                } else  {
+                    limpiarTablero();
+                    coordenadasTablero1[1] = coordenadasTablero1[1] + direccion;
+                    gridTablero.add(imagenFicha, coordenadasTablero1[0], coordenadasTablero1[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV1(), fichaEnJuego.getV2());
+                }
+            } else {
+
+                if (coordenadasTablero1[1] == 0) {
+                    limpiarTablero();
+                    coordenadasTablero1[0] = coordenadasTablero1[0] + 1;
+                    gridTablero.add(imagenFicha, coordenadasTablero1[0], coordenadasTablero1[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV1(), fichaEnJuego.getV2());
+                } else {
+                    limpiarTablero();
+                    coordenadasTablero1[0] = coordenadasTablero1[0] + direccion;
+                    gridTablero.add(imagenFicha, coordenadasTablero1[0], coordenadasTablero1[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV1(), fichaEnJuego.getV2());
+                }
+
+            }
 
         } else {
 
-            coordenadasTablero2[0] = coordenadasTablero2[0] + direccion;
-            gridTablero.add(imagenFicha, coordenadasTablero2[0], coordenadasTablero2[1]);
+            if (coordenadasTablero2[0] == 6) {
+                if (coordenadasTablero2[1] == 6) {
+                    limpiarTablero();
+                    coordenadasTablero2[0] = coordenadasTablero2[0] - 1;
+                    gridTablero.add(imagenFicha, coordenadasTablero2[0], coordenadasTablero2[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV2(), fichaEnJuego.getV1());
+                } else  {
+                    limpiarTablero();
+                    coordenadasTablero2[1] = coordenadasTablero2[1] + direccion;
+                    gridTablero.add(imagenFicha, coordenadasTablero2[0], coordenadasTablero2[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV2(), fichaEnJuego.getV1());
+                }
+            } else {
+
+                if (coordenadasTablero2[1] == 6) {
+                    limpiarTablero();
+                    coordenadasTablero2[0] = coordenadasTablero2[0] - 1;
+                    gridTablero.add(imagenFicha, coordenadasTablero2[0], coordenadasTablero2[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV2(), fichaEnJuego.getV1());
+                } else {
+                    limpiarTablero();
+                    coordenadasTablero2[0] = coordenadasTablero2[0] + direccion;
+                    gridTablero.add(imagenFicha, coordenadasTablero2[0], coordenadasTablero2[1]);
+                    fichaEnJuego = nuevaFichaEnJuego(fichaEnJuego.getV1(), ficha.getV2());
+//                    fichaEnJuego = nuevaFichaEnJuego(ficha.getV2(), fichaEnJuego.getV1());
+                    // verificar que sea correcto o los valores invertidos
+                }
+            }
 
         }
-
-        limpiarTablero();
 
     }
 
@@ -243,11 +329,14 @@ public class PantallaUnJugador {
 
             if (jugador == 1) {
 
-                dialogo.setContentText("No tienes fichas validas, toca la computadora");
+                dialogo.setContentText("No tienes fichas validas, tienes que comer");
+                System.out.println("El jugador no tiene fichas validas, tiene que comer");
+                comerFichas(fichasJugador, fichaEnJuego, jugador);
 
             } else {
 
-                dialogo.setContentText("No tienes fichas validas, toca el jugador");
+                System.out.println("No hay fichas validas, la computadora tiene que comer");
+                comerFichas(fichasJugador, fichaEnJuego, jugador);
 
             }
 
@@ -264,10 +353,31 @@ public class PantallaUnJugador {
 
                 System.out.println("Fichas validas: " + listaFichasValidas);
                 Ficha fichaCompu = (Ficha) fichasJugador.get(listaFichasValidas.get(0));
+                ListaDeFichas.fichasComputadora.remove(listaFichasValidas.get(0));
                 tiradaCompu(fichaCompu, fichaEnJuego);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                evaluarJugador(ListaDeFichas.fichasJugador1, fichaEnJuego, 1);
 
             }
 
+        }
+
+    }
+
+    private void comerFichas(ArrayList fichasJugador, Ficha fichaEnJuego, int jugador) {
+
+        if (jugador == 1) {
+            limpiarFichas();
+            crearBoton(fichasJugador, fichaEnJuego, jugador);
+        } else {
+            tomarFicha(fichasJugador);
+            evaluarJugador(fichasJugador, fichaEnJuego, jugador);
         }
 
     }
@@ -303,8 +413,6 @@ public class PantallaUnJugador {
 
     public void clickEnFicha(ArrayList<Integer> listaFichasValidas, ArrayList fichasJugador, Ficha fichaEnJuego) {
 
-        limpiarTablero();
-
         for (int i = 0; i < listaFichasValidas.size(); i++) {
 
             int posicion = listaFichasValidas.get(i);
@@ -313,6 +421,8 @@ public class PantallaUnJugador {
                 @Override
                 public void handle(MouseEvent event) {
 
+                    limpiarTablero();
+
                     int posicion = gridFichas.getChildren().indexOf(event.getSource());
 
                     Ficha ficha = (Ficha) fichasJugador.get(posicion);
@@ -320,6 +430,7 @@ public class PantallaUnJugador {
                     fichaInvertida.setV1(ficha.getV2());
                     fichaInvertida.setV2(ficha.getV1());
                     fichaInvertida.setFichaURL(ficha.getFichaURL());
+                    fichaInvertida.setImagenFicha(ficha.getImagenFicha());
 
                     dialogo.setContentText("Ficha seleccionada: " + ficha.getV1() + ":|:" + ficha.getV2());
 
@@ -382,11 +493,25 @@ public class PantallaUnJugador {
 
         if (direccion < 0) {
 
-            gridTablero.add(panel, coordenadasTablero1[0] - 1, coordenadasTablero1[1]);
+            if (coordenadasTablero1[0] == 0) {
+                gridTablero.add(panel, coordenadasTablero1[0], coordenadasTablero1[1] - 1);
+                if (coordenadasTablero1[1] == 0) {
+                    gridTablero.add(panel, coordenadasTablero1[0] + 1, coordenadasTablero1[1]);
+                }
+            } else {
+                gridTablero.add(panel, coordenadasTablero1[0] - 1, coordenadasTablero1[1]);
+            }
 
         } else {
 
-            gridTablero.add(panel, coordenadasTablero2[0] + 1, coordenadasTablero2[1]);
+            if (coordenadasTablero2[0] == 6) {
+                gridTablero.add(panel, coordenadasTablero2[0], coordenadasTablero2[1] + 1);
+                if (coordenadasTablero2[1] == 6) {
+                    gridTablero.add(panel, coordenadasTablero2[0] - 1, coordenadasTablero2[1]);
+                }
+            } else {
+                gridTablero.add(panel, coordenadasTablero2[0] + 1, coordenadasTablero2[1]);
+            }
 
         }
 
@@ -404,6 +529,8 @@ public class PantallaUnJugador {
             }
 
         }
+
+        gridTablero.setGridLinesVisible(true);
 
     }
 
@@ -423,6 +550,7 @@ public class PantallaUnJugador {
                 mostrarFichasTablero(ficha, direccion, invertida);
                 quitarFicha(ficha);
                 mostrarFichas();
+                evaluarJugador(ListaDeFichas.fichasComputadora, fichaEnJuego, 0);
 
             }
         });
@@ -454,19 +582,23 @@ public class PantallaUnJugador {
         fichaInvertida.setV1(ficha.getV2());
         fichaInvertida.setV2(ficha.getV1());
         fichaInvertida.setFichaURL(ficha.getFichaURL());
+        fichaInvertida.setImagenFicha(ficha.getImagenFicha());
 
-        dialogo.setContentText("Ficha seleccionada: " + ficha.getV1() + ":|:" + ficha.getV2());
+        System.out.println("Ficha seleccionada: " + ficha.getV1() + ":|:" + ficha.getV2());
 
         if (validarDerecha(ficha, fichaEnJuego)) {
             mostrarFichasTablero(ficha, derecha, false);
+            return;
         }
 
         if (validarIzquierda(ficha, fichaEnJuego)) {
             mostrarFichasTablero(ficha, izquierda, false);
+            return;
         }
 
         if (validarDerecha(fichaInvertida, fichaEnJuego)) {
             mostrarFichasTablero(fichaInvertida, derecha, true);
+            return;
         }
 
         if (validarIzquierda(fichaInvertida, fichaEnJuego)) {
@@ -474,5 +606,44 @@ public class PantallaUnJugador {
         }
 
     }
+
+    public void crearBoton (ArrayList fichasJugador, Ficha fichaEnJuego, int jugador) {
+
+//        crearGridSimetrico();
+
+        Button boton = new Button("Tomar ficha");
+        boton.setPrefWidth(Region.USE_COMPUTED_SIZE);
+        boton.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        boton.setOnMouseClicked (new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                tomarFicha(fichasJugador);
+                evaluarJugador(fichasJugador, fichaEnJuego, jugador);
+
+            }
+        });
+
+        gridFichas.add(boton, 0, 3);
+
+    }
+
+    public void crearGridSimetrico () {
+
+        ColumnConstraints column = new ColumnConstraints();
+        gridFichas.getColumnConstraints().add(column);
+
+        for (int i = 0; i < 7; i++) {
+
+            RowConstraints row = new RowConstraints();
+            row.setPercentHeight(100 / 7);
+            gridFichas.getRowConstraints().add(row);
+
+        }
+
+    }
+
+
 
 }

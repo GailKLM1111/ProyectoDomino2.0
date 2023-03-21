@@ -2,6 +2,7 @@
   <library name="Maven: com.github.almasb:fxgl:11.17">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/com/github/almasb/fxgl/11.17/fxgl-11.17.jar!/" />
+      <root url="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_361.jdk/Contents/Home/jre/lib/rt.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/com/github/almasb/fxgl/11.17/fxgl-11.17-javadoc.jar!/" />
