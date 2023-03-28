@@ -1,7 +1,9 @@
-package codigo.proyectodomino2;
+package com.example.proyectodomino2;
 
-import codigo.modelo.Ficha;
-import codigo.modelo.ListaDeFichas;
+//import com.almasb.fxgl.audio.AudioPlayer;
+import com.example.audio.SonidoBotones;
+import com.example.modelo.Ficha;
+import com.example.modelo.ListaDeFichas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,8 +25,13 @@ public class MainController {
     @FXML
     private ImageView jugarBoton;
 
+    SonidoBotones sonidoBotones = new SonidoBotones();
+
+
     @FXML
     void jugar(MouseEvent event) {
+
+        sonidoBotones.reproducirSonidoBotones();
 
         try {
             Parent noJuagadores = FXMLLoader.load(getClass().getResource("noJugadores.fxml"));
@@ -56,6 +63,7 @@ public class MainController {
 
     @FXML
     void aclarar(MouseEvent event) {
+
 
         jugarBoton.setEffect(null);
 
@@ -165,72 +173,6 @@ public class MainController {
         return mulaValor;
 
     }
-
-//    public static void evalularJugador (ArrayList lj, String j, int z) {
-//
-//        int r = -1;
-//        System.out.println("Jugador(a) "+j+" Puedes jugar con la(s) ficha(s):");
-//
-//        for (int i=0;i< lj.size();i++) {
-//
-//            Ficha f=null;
-//            f=(Ficha)lj.get(i);
-//
-//            if (true==f.getJugar()) {
-//
-//                if (v1==f.getV1()||v1==f.getV2()||v2==f.getV1()||v2==f.getV2()) {
-//
-//                    int h=i+1;
-//                    System.out.println("|" + f.getV1() + ":" + f.getV2() +"| .........."+h+" \n");
-//                    r++;
-//                    sb=0;
-//
-//                }
-//
-//            }
-//
-//        }
-//
-//        if (r==-1) {
-//
-//            System.out.println("No tienes fichas para jugar");
-//            tomar_ficha(lj,j,z);
-//
-//        } else {
-//
-//            System.out.println("Digita el numero que indica tu ficha para jugarla");
-//            int t=Leer.datoInt();
-//            t=t-1;
-//            Ficha fi=null;
-//            fi=(Ficha)lj.get(t);
-//
-//            if (v1!=v2) {
-//
-//                if (v1==fi.getV1())
-//                    v1=fi.getV2();
-//                else
-//                if (v1==fi.getV2())
-//                    v1=fi.getV1();
-//                else
-//                if (v2==fi.getV1())
-//                    v2=fi.getV2();
-//                else
-//                if (v2==fi.getV2())
-//                    v2=fi.getV1();
-//
-//            } else {
-//
-//                if (v1==fi.getV1()) {
-//                    v2=fi.getV2();
-//                } else
-//                    v1=fi.getV1();
-//
-//            }
-//
-//            fi.setJugar(false);
-//
-//        }
-//    }
 
     public static ArrayList<Integer> buscarFichasValidas (ArrayList fichasJugador, Ficha fichaEnJuego) {
 
@@ -371,25 +313,22 @@ public class MainController {
 
     }
 
-    public static void tomarFicha(ArrayList listaFichas) {
+    public static int tomarFicha(ArrayList listaFichas) {
 
         int bandera = 0;
         int indice = 0;
 
-//        if (sb!=3) {
+        while (bandera != 1 && bandera != 3) {
 
-            while (bandera < 1) {
+            indice = ListaDeFichas.getIndiceFicha();
+            Ficha ficha = (Ficha)ListaDeFichas.fichasTotales.get(indice);
 
-                indice = ListaDeFichas.getIndiceFicha();
-                Ficha ficha = (Ficha)ListaDeFichas.fichasTotales.get(indice);
+            if (ficha.getEstado()) {
 
-                if (ficha.getEstado()) {
-
-                    bandera = 1;
-                    ficha.setEstado(false);
-                    listaFichas.add(ficha);
-                    System.out.println("La ficha que tomaste es: " + ficha.getV1() + ":" + ficha.getV2());
-
+                bandera = 1;
+                ficha.setEstado(false);
+                listaFichas.add(ficha);
+                System.out.println("La ficha que tomaste es: " + ficha.getV1() + ":" + ficha.getV2());
 //                    int bandera2 = 0;
 //
 //                    while (bandera2 < 1) {
@@ -415,25 +354,26 @@ public class MainController {
 //
 //                    }
 
-                } else {
+            } else {
 
-                    for (Object listaFicha : listaFichas) {
-                        Ficha ficha2 = (Ficha) listaFicha;
-                        if (ficha2.getEstado()) {
-                            bandera++;
-                        }
+                for (Object listaFicha : ListaDeFichas.fichasTotales) {
+                    Ficha ficha2 = (Ficha) listaFicha;
+                    if (ficha2.getEstado()) {
+                        bandera = 2;
+                        break;
                     }
+                }
 
+                if (bandera == 0) {
+                    System.out.println("NO HAY MAS FICHAS");
+                    bandera = 3;
                 }
 
             }
 
-//        } else {
-//
-//            System.out.println("SE HA SERRADO EL JUEGO");
-//            juego_cerrado(z);
-//
-//        }
+        }
+
+        return bandera;
 
     }
 

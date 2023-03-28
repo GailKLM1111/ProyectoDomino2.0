@@ -1,4 +1,4 @@
-package codigo.modelo;
+package com.example.modelo;
 
 import java.util.ArrayList;
 
@@ -31,6 +31,17 @@ public class ListaDeFichas {
     public static void agregarFichas(ArrayList listaFichas, Ficha ficha) {
 
         listaFichas.add(ficha);
+
+    }
+
+    public static void limpiarArreglos() {
+
+        fichasTotales.clear();
+        fichasJugador1.clear();
+        fichasJugador2.clear();
+        fichasJugador3.clear();
+        fichasJugador4.clear();
+        fichasComputadora.clear();
 
     }
 

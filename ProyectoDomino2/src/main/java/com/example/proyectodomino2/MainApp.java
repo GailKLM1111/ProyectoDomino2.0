@@ -1,13 +1,13 @@
-package codigo.proyectodomino2;
+package com.example.proyectodomino2;
 
+import com.example.audio.SonidoFichas;
+import com.example.audio.TemaPrincipal;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
-import javax.sound.sampled.*;
 
 public class MainApp extends Application {
 
@@ -19,24 +19,8 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
 
-        File urlMusica = new File("/Users/gaillopez/Desktop/OCTAVO SEMESTRE /Videojuegos/ProyectoDomino2.0/ProyectoDomino2/src/main/resources/audio/AllemIversomTheRidge.wav");
-        String urlMusicaTemp = urlMusica.toURI().toURL().toExternalForm();
-
-        File urlMusica2 = new File(urlMusicaTemp);
-
-        try {
-
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(urlMusica);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
-        }
-
+        TemaPrincipal temaPrincipal = new TemaPrincipal();
+        temaPrincipal.reproducirTemaPrincipal();
 
     }
 

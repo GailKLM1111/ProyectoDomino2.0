@@ -1,32 +1,44 @@
-package codigo.proyectodomino2;
+package com.example.proyectodomino2;
 
-import codigo.modelo.ListaDeFichas;
-import codigo.modelo.Ficha;
-import javafx.event.ActionEvent;
+import com.example.audio.SonidoBotones;
+import com.example.audio.SonidoFichas;
+import com.example.audio.SonidoTomarFichas;
+import com.example.modelo.ListaDeFichas;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import com.example.modelo.Ficha;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-import static codigo.proyectodomino2.MainController.*;
+import static com.example.proyectodomino2.MainController.*;
 
 public class PantallaUnJugador {
 
     @FXML
+    public ImageView iniciarBoton;
+    @FXML
+    public ImageView tomarFichaBoton;
+    @FXML
+    public ImageView volverBoton;
+    @FXML
+    public AnchorPane pantallaUnJugador;
+    @FXML
     private GridPane gridFichas;
-
     @FXML
     private GridPane gridTablero;
-
-    @FXML
-    private ImageView tableroUnJugador;
 
     @FXML
     private Button inicioBoton;
@@ -34,16 +46,51 @@ public class PantallaUnJugador {
     @FXML
     private DialogPane dialogo;
 
+    @FXML
+    private ImageView ganasteMsg;
+
+    @FXML
+    private ImageView perdisteMsg;
+
+    @FXML
+    private ImageView juegoCerradoMsg;
+
+    @FXML
+    void obscurecer(MouseEvent event) {
+
+        Light.Distant light = new Light.Distant();
+        light.setAzimuth(-135.0);
+
+        Lighting lighting = new Lighting();
+        lighting.setLight(light);
+        lighting.setSurfaceScale(5.0);
+
+        iniciarBoton.setEffect(lighting);
+
+    }
+
+    @FXML
+    void aclarar(MouseEvent event) {
+
+        iniciarBoton.setEffect(null);
+
+    }
+
     int izquierda = -1;
     int derecha = 1;
     private int[] coordenadasTablero1 = new int[]{3,3};
     private int[] coordenadasTablero2 = new int[]{3,3};
-    private int turno;
+    private int juegoCerrado;
 
     Ficha fichaEnJuego = new Ficha();
+    SonidoFichas sonidoFichas = new SonidoFichas();
+    SonidoTomarFichas sonidoTomarFichas = new SonidoTomarFichas();
+    SonidoBotones sonidoBotones = new SonidoBotones();
 
     @FXML
-    void repartirFichas(ActionEvent event) {
+    void repartirFichas(MouseEvent event) {
+
+        sonidoBotones.reproducirSonidoBotones();
 
         crearFichas();
 
@@ -373,6 +420,7 @@ public class PantallaUnJugador {
 
                 if (jugador == 1) {
 
+                    juegoCerrado = 0;
                     dialogo.setContentText("Puedes jugar con las fichas marcadas");
                     marcarFichas(listaFichasValidas);
                     clickEnFicha(listaFichasValidas, fichasJugador, fichaEnJuego);
@@ -380,6 +428,7 @@ public class PantallaUnJugador {
 
                 } else {
 
+                    juegoCerrado = 0;
                     mostrarFichasCompu();
                     System.out.println("Fichas validas: " + listaFichasValidas);
                     Ficha fichaCompu = (Ficha) fichasJugador.get(listaFichasValidas.get(0));
@@ -393,8 +442,10 @@ public class PantallaUnJugador {
                     }
 
                     if (evaluarGanador(fichasJugador)) {
-                        dialogo.setContentText("Perdiste");
-                        System.out.println("Perdiste");
+
+                        int perdiste = 2;
+                        finDelJuego(perdiste);
+
                     } else {
                         evaluarJugador(ListaDeFichas.fichasJugador1, 1);
                     }
@@ -407,13 +458,13 @@ public class PantallaUnJugador {
 
             if (jugador == 1) {
 
-                dialogo.setContentText("Ganaste");
-                System.out.println("Ganaste");
+                int ganaste = 1;
+                finDelJuego(ganaste);
 
             } else {
 
-                dialogo.setContentText("Perdiste");
-                System.out.println("Perdiste");
+                int perdiste = 2;
+                finDelJuego(perdiste);
 
             }
 
@@ -421,14 +472,63 @@ public class PantallaUnJugador {
 
     }
 
+    private void finDelJuego(int opcion) {
+
+        switch (opcion) {
+
+            case 1:
+                ganasteMsg.setVisible(true);
+                crearBotonVolver();
+                break;
+
+            case 2:
+                perdisteMsg.setVisible(true);
+                crearBotonVolver();
+                break;
+
+            case 3:
+                juegoCerradoMsg.setVisible(true);
+                crearBotonVolver();
+                break;
+
+            default:
+                break;
+
+        }
+
+    }
+
     private void comerFichas(ArrayList fichasJugador, int jugador) {
+
+        int resultado;
 
         if (jugador == 1) {
             limpiarFichas();
-            crearBoton(fichasJugador, jugador);
+//            crearBoton(fichasJugador, jugador);
+            crearBotonTomarFicha(fichasJugador, jugador);
         } else {
-            tomarFicha(fichasJugador);
-            evaluarJugador(fichasJugador, jugador);
+            resultado = tomarFicha(fichasJugador);
+
+            if (resultado == 1) {
+                juegoCerrado = 0;
+                System.out.println("La computadora tomo una ficha");
+                evaluarJugador(fichasJugador, jugador);
+            } else {
+
+                if (juegoCerrado == 3) {
+
+                    finDelJuego(juegoCerrado);
+
+                } else {
+
+                    juegoCerrado++;
+                    System.out.println("Ya no hay fichas para la computadora");
+                    evaluarJugador(ListaDeFichas.fichasJugador1, 1);
+
+                }
+
+            }
+
         }
 
     }
@@ -599,8 +699,6 @@ public class PantallaUnJugador {
 
         }
 
-        gridTablero.setGridLinesVisible(true);
-
     }
 
     public void clickEnCasilla (Pane panel, Ficha ficha, int direccion, boolean invertida) {
@@ -609,20 +707,18 @@ public class PantallaUnJugador {
             @Override
             public void handle(MouseEvent event) {
 
-                if (invertida) {
-                    System.out.println("Se inserta la ficha de la siguiente manera: " + ficha.getV1() + ":|:" + ficha.getV2());
-                } else {
-                    System.out.println("Se inserta la ficha de la siguiente manera: " + ficha.getV1() + ":|:" + ficha.getV2());
-                }
+                System.out.println("Se inserta la ficha de la siguiente manera: " + ficha.getV1() + ":|:" + ficha.getV2());
 
                 limpiarTablero();
                 mostrarFichasTablero(ficha, direccion, invertida);
                 quitarFicha(ficha);
                 mostrarFichas();
 
+                sonidoFichas.reproducirSonidoFichas();
+
                 if (evaluarGanador(ListaDeFichas.fichasJugador1)) {
-                    dialogo.setContentText("Ganaste");
-                    System.out.println("Ganaste");
+                    int ganaste = 1;
+                    finDelJuego(ganaste);
                 } else {
                     evaluarJugador(ListaDeFichas.fichasComputadora, 0);
                 }
@@ -663,28 +759,30 @@ public class PantallaUnJugador {
 
         if (validarDerecha(ficha, fichaEnJuego)) {
             mostrarFichasTablero(ficha, derecha, false);
+            sonidoFichas.reproducirSonidoFichas();
             return;
         }
 
         if (validarIzquierda(ficha, fichaEnJuego)) {
             mostrarFichasTablero(ficha, izquierda, false);
+            sonidoFichas.reproducirSonidoFichas();
             return;
         }
 
         if (validarDerecha(fichaInvertida, fichaEnJuego)) {
             mostrarFichasTablero(fichaInvertida, derecha, true);
+            sonidoFichas.reproducirSonidoFichas();
             return;
         }
 
         if (validarIzquierda(fichaInvertida, fichaEnJuego)) {
             mostrarFichasTablero(fichaInvertida, izquierda, true);
+            sonidoFichas.reproducirSonidoFichas();
         }
 
     }
 
     public void crearBoton (ArrayList fichasJugador, int jugador) {
-
-//        crearGridSimetrico();
 
         Button boton = new Button("Tomar ficha");
         boton.setPrefWidth(Region.USE_COMPUTED_SIZE);
@@ -695,13 +793,178 @@ public class PantallaUnJugador {
             public void handle(MouseEvent event) {
 
                 tomarFicha(fichasJugador);
-                mostrarFichas();
-                evaluarJugador(fichasJugador, jugador);
+                sonidoTomarFichas.reproducirSonidoTomarFichas();
+
+                int resultado = tomarFicha(fichasJugador);
+
+                if (resultado == 1) {
+
+                    juegoCerrado = 0;
+                    System.out.println("El jugaror " + jugador + " tomo una ficha");
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    mostrarFichas();
+                    evaluarJugador(fichasJugador, jugador);
+
+                } else {
+
+                    if (juegoCerrado == 3) {
+
+                        finDelJuego(juegoCerrado);
+
+                    } else {
+
+                        juegoCerrado++;
+                        System.out.println("Ya no hay fichas");
+                        mostrarFichas();
+                        evaluarJugador(ListaDeFichas.fichasComputadora, 0);
+
+                    }
+
+                }
 
             }
         });
 
         gridFichas.add(boton, 0, 3);
+
+    }
+
+    public void crearBotonTomarFicha(ArrayList fichasJugador, int jugador) {
+
+        tomarFichaBoton.setVisible(true);
+
+        tomarFichaBoton.setOnMouseClicked (new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                sonidoBotones.reproducirSonidoBotones();
+
+                tomarFicha(fichasJugador);
+                sonidoTomarFichas.reproducirSonidoTomarFichas();
+
+                int resultado = tomarFicha(fichasJugador);
+
+                if (resultado == 1) {
+
+                    juegoCerrado = 0;
+                    System.out.println("El jugaror " + jugador + " tomo una ficha");
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    mostrarFichas();
+                    evaluarJugador(fichasJugador, jugador);
+
+                } else {
+
+                    if (juegoCerrado == 3) {
+
+                        finDelJuego(juegoCerrado);
+
+                    } else {
+
+                        juegoCerrado++;
+                        System.out.println("Ya no hay fichas");
+                        mostrarFichas();
+                        evaluarJugador(ListaDeFichas.fichasComputadora, 0);
+
+                    }
+
+                }
+
+            }
+        });
+
+        tomarFichaBoton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Light.Distant light = new Light.Distant();
+                light.setAzimuth(-135.0);
+
+                Lighting lighting = new Lighting();
+                lighting.setLight(light);
+                lighting.setSurfaceScale(5.0);
+
+                tomarFichaBoton.setEffect(lighting);
+
+            }
+        });
+
+        tomarFichaBoton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                tomarFichaBoton.setEffect(null);
+
+            }
+        });
+
+        gridFichas.add(tomarFichaBoton, 0, 3);
+
+    }
+
+    public void crearBotonVolver () {
+
+        limpiarFichas();
+
+        volverBoton.setVisible(true);
+
+        volverBoton.setOnMouseClicked (new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                sonidoBotones.reproducirSonidoBotones();
+
+                try {
+
+                    ListaDeFichas.limpiarArreglos();
+
+                    Parent pantallaDeJuego = FXMLLoader.load(getClass().getResource("noJugadores.fxml"));
+
+                    Scene escenaNueva = new Scene(pantallaDeJuego);
+
+                    Stage escenaActual = (Stage) pantallaUnJugador.getScene().getWindow();
+                    escenaActual.setScene(escenaNueva);
+
+                } catch (Exception e) {
+                    System.out.println("Error al cargar la ventana:" + e);
+                }
+
+            }
+        });
+
+        volverBoton.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Light.Distant light = new Light.Distant();
+                light.setAzimuth(-135.0);
+
+                Lighting lighting = new Lighting();
+                lighting.setLight(light);
+                lighting.setSurfaceScale(5.0);
+
+                volverBoton.setEffect(lighting);
+
+            }
+        });
+
+        volverBoton.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                volverBoton.setEffect(null);
+
+            }
+        });
+
+        gridFichas.add(volverBoton, 0, 3);
 
     }
 

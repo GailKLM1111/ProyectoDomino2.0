@@ -1,4 +1,4 @@
-package codigo.proyectodomino2;
+package com.example.proyectodomino2;
 
 public class Lanzador {
 
