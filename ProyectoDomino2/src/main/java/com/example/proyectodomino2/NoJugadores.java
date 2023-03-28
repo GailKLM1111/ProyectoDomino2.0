@@ -1,4 +1,4 @@
-package com.example.proyectodomino2;
+package codigo.proyectodomino2;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Main-Class: com.example.proyectodomino2.Lanzador
+Class-Path: fxgl-17.1.jar javafx-fxml-19.0.2.1-mac.jar countries-17.0.23
+ .jar fxgl-core-17.1.jar lifecycle-4.0.13.jar tilesfx-17.1.17.jar valida
+ torfx-0.4.0.jar javafx-graphics-19.0.2.1.jar javafx-web-19.0.2.1.jar st
+ orage-4.0.13.jar ikonli-core-12.3.1.jar jackson-annotations-2.12.1.jar 
+ javafx-media-19.0.2.1.jar bootstrapfx-core-0.4.0.jar util-4.0.13.jar ja
+ vafx-controls-19.0.2.1-mac.jar kotlin-stdlib-common-1.5.32.jar javafx-w
+ eb-19.0.2.1-mac.jar toolbox-17.0.35.jar jackson-databind-2.12.1.jar fxg
+ l-entity-17.1.jar annotations-13.0.jar javafx-base-19.0.2.1-mac.jar kot
+ lin-stdlib-1.5.32-modular.jar fxgl-io-17.1.jar toolboxfx-17.0.33.jar ja
+ vafx-controls-19.0.2.1.jar heatmap-17.0.12.jar audio-4.0.13.jar javafx-
+ media-19.0.2.1-mac.jar formsfx-core-11.6.0.jar javafx-graphics-19.0.2.1
+ -mac.jar javafx-base-19.0.2.1.jar jackson-core-2.12.1.jar fxgl-scene-17
+ .1.jar javafx-fxml-19.0.2.1.jar ikonli-javafx-12.3.1.jar fxgl-gameplay-
+ 17.1.jar controlsfx-11.1.2.jar
+

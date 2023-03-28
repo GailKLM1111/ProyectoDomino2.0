@@ -1,4 +1,4 @@
-package com.example.modelo;
+package codigo.modelo;
 
 import java.util.ArrayList;
 

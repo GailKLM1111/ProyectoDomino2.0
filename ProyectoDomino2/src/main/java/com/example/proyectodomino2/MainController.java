@@ -1,7 +1,7 @@
-package com.example.proyectodomino2;
+package codigo.proyectodomino2;
 
-import com.example.modelo.Ficha;
-import com.example.modelo.ListaDeFichas;
+import codigo.modelo.Ficha;
+import codigo.modelo.ListaDeFichas;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,15 +42,6 @@ public class MainController {
 
     @FXML
     void obscurecer(MouseEvent event) {
-
-//        Lighting efectoDeLuz = new Lighting();
-//        efectoDeLuz.setDiffuseConstant(0.5);
-//        efectoDeLuz.setSpecularConstant(0.5);
-//        efectoDeLuz.setSpecularExponent(0.5);
-//        efectoDeLuz.setSurfaceScale(0.5);
-//
-//        jugarBoton.setEffect(efectoDeLuz);
-
 
         Light.Distant light = new Light.Distant();
         light.setAzimuth(-135.0);

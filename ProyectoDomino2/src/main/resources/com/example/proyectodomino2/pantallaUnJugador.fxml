@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="820.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyectodomino2.PantallaUnJugador">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="820.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="codigo.proyectodomino2.PantallaUnJugador">
     <children>
         <SplitPane dividerPositions="0.2" layoutX="-6.0" layoutY="-2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <items>
@@ -48,7 +48,7 @@
                             </image>
                         </ImageView>
                         <DialogPane fx:id="dialogo" expanded="true" headerText="Mensajes del sistema" layoutX="59.0" layoutY="725.0" prefHeight="74.0" prefWidth="953.0" style="-fx-background-color: green;" visible="false" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="724.0" />
-                        <GridPane fx:id="gridTablero" gridLinesVisible="true" layoutX="332.0" layoutY="120.0" prefHeight="490.0" prefWidth="490.0" AnchorPane.bottomAnchor="195.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="295.0" AnchorPane.topAnchor="133.0">
+                        <GridPane fx:id="gridTablero" gridLinesVisible="false" layoutX="332.0" layoutY="120.0" prefHeight="490.0" prefWidth="490.0" AnchorPane.bottomAnchor="195.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="295.0" AnchorPane.topAnchor="133.0">
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
